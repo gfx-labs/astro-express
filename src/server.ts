@@ -59,7 +59,7 @@ export function start(manifest: SSRManifest, options: ServerArgs) {
   // this is the fallback
   app.use(rootHandler);
 
-  const port = Number(options.port ?? (process.env.PORT || 8080));
+  const port = process.env.PORT ?? Number(options.port ?? (process.env.PORT || 8080));
   app.listen(
     {
       port,
