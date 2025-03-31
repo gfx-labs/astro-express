@@ -48,9 +48,10 @@ export function start(manifest: SSRManifest, options: ServerArgs) {
     }
   };
 
-  const staticHandler = express.static(fileURLToPath(clientAssetsRoot), {
-    fallthrough: true,
-  })
+  if(expressRoutes) {
+  expressRoutes(app)
+  }
+
 
   app.use(
     options.assetsPrefix,
@@ -61,16 +62,15 @@ export function start(manifest: SSRManifest, options: ServerArgs) {
       }
       next();
     },
-    staticHandler,
+    express.static(fileURLToPath(clientAssetsRoot)),
   );
-  app.use(staticHandler)
 
-  app.use(async (req, res) => {
-    const response = await nodeApp.render(req, { locals: (req as any).locals || {} });
-    await writeWebResponse(nodeApp, res, response);
-  });
+  const clientRootHandler = express.static(fileURLToPath(clientRoot))
 
-  expressRoutes(app)
+  app.use((req, res, next) => {
+    clientRootHandler(req, res, next);
+  })
+
   // this is the fallback
   app.use(rootHandler);
 
