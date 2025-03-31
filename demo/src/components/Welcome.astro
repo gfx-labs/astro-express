@@ -1,13 +1,10 @@
 ---
-import background from '../assets/background.svg';
-
 const loc = new URL("/api/todos", Astro.url)
 const response = await fetch(loc);
 const data = await response.json();
 ---
 
 <div id="container">
-	<img id="background" src={background.src} alt="" fetchpriority="high" />
 	<div>
 		{JSON.stringify(data)}
 	</div>

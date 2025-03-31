@@ -1,4 +1,4 @@
-import { relative } from 'path';
+import { join, relative } from 'path';
 import { fileURLToPath } from 'url';
 import express from 'express';
 import type {Plugin as VitePlugin } from 'vite';
@@ -102,12 +102,19 @@ export default function(options:IntegrationOptions):AstroIntegration {
                 }
             },
             'astro:build:start'(
-                // ...buildStartArgs
+                 ...buildStartArgs
             ) {
                 let bc: AstroConfig['build'] | undefined;
-                bc = config?.build;
+                if (
+                    buildStartArgs.length > 0 &&
+                        (buildStartArgs as any)[0].buildConfig
+                ) {
+                    bc =  (buildStartArgs as any)[0].buildConfig;
+                } else {
+                    bc = config?.build;
+                }
                 if(bc) {
-                    args.clientRelative = relative(fileURLToPath(bc.server), fileURLToPath(bc.client));
+                    args.clientRelative = relative(join(fileURLToPath(bc.server), "chunks"), fileURLToPath(bc.client));
                 }
             }
         }

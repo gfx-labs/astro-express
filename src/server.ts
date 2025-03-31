@@ -37,21 +37,11 @@ export function start(manifest: SSRManifest, options: ServerArgs) {
     "." + options.assetsPrefix,
     clientRoot + "/",
   );
-  const rootHandler: RequestHandler = async (request , reply) => {
-    const routeData = nodeApp.match(request);
-    if (routeData) {
-      const response = await nodeApp.render(request, { routeData });
 
-      await writeWebResponse(nodeApp, reply, response);
-    } else {
-      reply.status(404).type("text/plain").send("Not found");
-    }
-  };
 
   if(expressRoutes) {
-  expressRoutes(app)
+    expressRoutes(app)
   }
-
 
   app.use(
     options.assetsPrefix,
@@ -70,6 +60,17 @@ export function start(manifest: SSRManifest, options: ServerArgs) {
   app.use((req, res, next) => {
     clientRootHandler(req, res, next);
   })
+
+  const rootHandler: RequestHandler = async (request , reply) => {
+    const routeData = nodeApp.match(request);
+    if (routeData) {
+      const response = await nodeApp.render(request, { routeData });
+
+      await writeWebResponse(nodeApp, reply, response);
+    } else {
+      reply.status(404).type("text/plain").send("Not found");
+    }
+  };
 
   // this is the fallback
   app.use(rootHandler);
