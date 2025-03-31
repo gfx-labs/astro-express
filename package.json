@@ -1,0 +1,20 @@
+{
+  "name": "@gfxlabs/astro-express",
+  "packageManager": "yarn@4.5.2",
+  "files": ["lib/*"],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "dependencies": {
+    "@astrojs/webapi": "^3.0.0",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.1",
+    "astro": "^5.5.5",
+    "typescript": "^5.8.2",
+    "vite": "^6.2.3"
+  },
+  "directories": {
+    "lib": "lib"
+  }
+}
