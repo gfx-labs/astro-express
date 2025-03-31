@@ -65,7 +65,7 @@ export function start(manifest: SSRManifest, options: ServerArgs) {
   );
   app.use(staticHandler)
 
-  app.all("/*", async (req, res) => {
+  app.use(async (req, res) => {
     const response = await nodeApp.render(req, { locals: (req as any).locals || {} });
     await writeWebResponse(nodeApp, res, response);
   });
