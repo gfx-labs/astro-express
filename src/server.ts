@@ -49,23 +49,37 @@ export function start(manifest: SSRManifest, options: ServerArgs) {
   };
 
   const staticHandler = express.static(fileURLToPath(clientAssetsRoot), {
-    //  cacheControl: true,
-    //  maxAge: "31536000",
-    //  immutable: true,
     fallthrough: true,
   })
 
+  app.use(
+    options.assetsPrefix,
+    (req, res, next) => {
+      // dont cache .html files
+      if(!req.url.includes(".html") || options.cacheHtml) {
+        res.setHeader("Cache-Control", "max-age=31536000,immutable");
+      }
+      next();
+    },
+    staticHandler,
+  );
+  app.use(staticHandler)
 
-  app.use(staticHandler);
+  app.all("/*", async (req, res) => {
+    const response = await nodeApp.render(req, { locals: (req as any).locals || {} });
+    await writeWebResponse(nodeApp, res, response);
+  });
+
   expressRoutes(app)
   // this is the fallback
   app.use(rootHandler);
 
   const port = process.env.PORT ?? Number(options.port ?? (process.env.PORT || 8080));
+  const host = options.host ?? (process.env.HOST || "0.0.0.0");
   app.listen(
     {
       port,
-      host: "0.0.0.0",
+      host,
     },
     function (err) {
       if (err) {

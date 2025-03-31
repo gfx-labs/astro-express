@@ -22,10 +22,6 @@ function entryToPath(entry: string | URL) {
   return entry;
 }
 
-/**
-* @param {IntegrationOptions} [options]
-* @returns {VitePlugin}
-*/
 function vitePlugin(options:IntegrationOptions): VitePlugin {
   return {
     name: '@gfxlabs/astro-express:vite',
@@ -58,10 +54,6 @@ function vitePlugin(options:IntegrationOptions): VitePlugin {
     }
 }
 
-/**
-* @param {IntegrationOptions} options
-* @returns {import('astro').AstroIntegration}
-*/
 export default function(options:IntegrationOptions):AstroIntegration {
     let args:any = /** @type {any} */({});
     args.port = options.port;
