@@ -25,7 +25,9 @@ const expressRoutes: DefineExpressRoutes=
  */
 export function start(manifest: SSRManifest, options: ServerArgs) {
 
-  console.log("Starting server with router", expressRoutes);
+  if(options.verbose !== false) {
+    console.log("Starting server with router", expressRoutes);
+  }
   const nodeApp = new NodeApp(manifest);
 
   const app = express();
@@ -71,6 +73,9 @@ export function start(manifest: SSRManifest, options: ServerArgs) {
         process.exit(1);
       }
       // Server is now listening on ${address}
+      if(options.verbose !== false) {
+        console.log(`Server is listening on http://0.0.0.0:${port}`);
+      }
     },
   );
 }

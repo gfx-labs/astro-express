@@ -3,6 +3,7 @@ export type ServerArgs = {
     clientRelative: string;
     assetsPrefix: string;
     port: number | undefined;
+    verbose?: boolean;
 };
 export type DefineExpressRoutes = (express: Router) => void;
 export type IntegrationOptions = {
@@ -19,4 +20,5 @@ export type IntegrationOptions = {
      * any host variables.
      */
     port?: number;
+    verbose?: boolean;
 };
